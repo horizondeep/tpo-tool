@@ -101,43 +101,64 @@
         }
 
         .sidebar-footer {
-            padding: 20px 25px;
+            padding: 20px 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: auto;
         }
 
-        .sidebar-footer-user {
+        .team-header {
+            color: #94a3b8;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .team-members {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 12px;
-            color: #cbd5e1;
-            font-size: 13px;
         }
 
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
+        .team-member {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 16px;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        .user-info {
+        .team-member:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .team-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-info {
             flex: 1;
         }
 
-        .user-name {
+        .team-name {
             font-weight: 600;
             color: white;
-            font-size: 13px;
+            font-size: 12px;
+            margin-bottom: 2px;
         }
 
-        .user-role {
-            font-size: 11px;
+        .team-role {
+            font-size: 10px;
             color: #94a3b8;
+            line-height: 1.2;
         }
 
         .container {
@@ -840,6 +861,276 @@
         .empty-state p {
             font-size: 14px;
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+
+            .app-wrapper {
+                flex-direction: column;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-radius: 0;
+                padding: 10px 0;
+            }
+
+            .sidebar-logo {
+                padding: 15px 20px;
+                margin-bottom: 10px;
+            }
+
+            .sidebar-logo h2 {
+                font-size: 16px;
+            }
+
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                padding: 0;
+                gap: 5px;
+            }
+
+            .sidebar-menu::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            .menu-item {
+                padding: 10px 15px;
+                font-size: 12px;
+                white-space: nowrap;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+
+            .menu-item.active {
+                border-left: none;
+                border-bottom-color: #667eea;
+            }
+
+            .sidebar-footer {
+                padding: 15px;
+                border-top: none;
+                background: rgba(0, 0, 0, 0.2);
+            }
+
+            .team-members {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 15px;
+                padding-bottom: 5px;
+            }
+
+            .team-member {
+                flex-direction: column;
+                text-align: center;
+                min-width: 80px;
+            }
+
+            .team-avatar {
+                width: 50px;
+                height: 50px;
+            }
+
+            .container {
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .header-content {
+                gap: 15px;
+            }
+
+            .header-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .header-text h1 {
+                font-size: 18px;
+            }
+
+            .header-text .subtitle {
+                font-size: 11px;
+                flex-wrap: wrap;
+            }
+
+            .badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dashboard-stats {
+                padding: 15px 20px;
+            }
+
+            .stats-header h2 {
+                font-size: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 10px;
+            }
+
+            .stat-label {
+                font-size: 7px;
+            }
+
+            .stat-value {
+                font-size: 14px;
+            }
+
+            .stat-change {
+                font-size: 7px;
+            }
+
+            .chart-container {
+                padding: 12px;
+            }
+
+            .chart-header {
+                font-size: 10px;
+            }
+
+            .bar-chart {
+                height: 50px;
+                padding: 15px 5px;
+            }
+
+            .controls {
+                padding: 10px 20px;
+                flex-wrap: wrap;
+            }
+
+            .controls-title {
+                font-size: 12px;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .plan-info {
+                font-size: 11px;
+            }
+
+            .btn-secondary {
+                width: 100%;
+            }
+
+            .calendar-wrapper {
+                padding: 15px 20px;
+            }
+
+            .calendar th {
+                font-size: 6px;
+                padding: 3px 2px;
+            }
+
+            .calendar td {
+                min-width: 45px;
+                height: 16px;
+                font-size: 6px;
+                padding: 1px;
+            }
+
+            .calendar td.week-label {
+                min-width: 40px;
+                font-size: 6px;
+            }
+
+            .promotion {
+                font-size: 5px;
+                padding: 2px;
+            }
+
+            .legend {
+                padding: 10px 20px;
+                gap: 10px;
+            }
+
+            .legend::before {
+                font-size: 10px;
+                width: 100%;
+            }
+
+            .legend-item {
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+
+            .legend-color {
+                width: 14px;
+                height: 14px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+                max-height: 85vh;
+            }
+
+            .modal-header {
+                font-size: 18px;
+            }
+
+            .form-group label {
+                font-size: 11px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-text h1 {
+                font-size: 16px;
+            }
+
+            .calendar th {
+                font-size: 5px;
+            }
+
+            .calendar td {
+                min-width: 40px;
+                height: 14px;
+            }
+
+            .promotion {
+                font-size: 4px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -877,11 +1168,28 @@
                 </div>
             </div>
             <div class="sidebar-footer">
-                <div class="sidebar-footer-user">
-                    <div class="user-avatar">👤</div>
-                    <div class="user-info">
-                        <div class="user-name">RGM Manager</div>
-                        <div class="user-role">Administrator</div>
+                <div class="team-header">RGM Team</div>
+                <div class="team-members">
+                    <div class="team-member">
+                        <img src="Mayank.png" alt="Mayank" class="team-avatar">
+                        <div class="team-info">
+                            <div class="team-name">Mayank</div>
+                            <div class="team-role">Chief Product Manager</div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="Subhajyoti.png" alt="Subhajyoti" class="team-avatar">
+                        <div class="team-info">
+                            <div class="team-name">Subhajyoti</div>
+                            <div class="team-role">Chief Data Scientist</div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="Amit.png" alt="Amit" class="team-avatar">
+                        <div class="team-info">
+                            <div class="team-name">Amit</div>
+                            <div class="team-role">Chief ML Engineer</div>
+                        </div>
                     </div>
                 </div>
             </div>
