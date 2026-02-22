@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Promotion Optimization - RGM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+            margin: 0;
+        }
+
+        .app-wrapper {
+            max-width: 1900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+            min-height: calc(100vh - 30px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px 0 0 12px;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-logo {
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo h2 {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-logo p {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 10px 0;
+        }
+
+        .menu-item {
+            padding: 14px 25px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-left-color: #667eea;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.2) 0%, transparent 100%);
+            color: white;
+            border-left-color: #667eea;
+            font-weight: 600;
+        }
+
+        .menu-item-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .sidebar-footer-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: white;
+            font-size: 13px;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .container {
+            flex: 1;
+            background: white;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 3px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-text .subtitle {
+            font-size: 13px;
+            opacity: 0.95;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #633d8f 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .dashboard-stats {
+            padding: 12px 30px;
+            background: linear-gradient(to bottom, #f8fafc, #ffffff);
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stats-header h2 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 6px;
+            padding: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 8px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .stat-icon {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 3px;
+        }
+
+        .stat-change {
+            font-size: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .stat-change.positive {
+            color: #10b981;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chart-header {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            height: 60px;
+            margin-top: 6px;
+            padding: 15px 10px 15px 10px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            min-height: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .bar:nth-child(1) {
+            background: linear-gradient(to top, #f59e0b, #d97706);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .bar:nth-child(2) {
+            background: linear-gradient(to top, #3b82f6, #2563eb);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .bar:nth-child(3) {
+            background: linear-gradient(to top, #8b5cf6, #7c3aed);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .bar:nth-child(4) {
+            background: linear-gradient(to top, #ec4899, #db2777);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+
+        .bar:hover {
+            opacity: 0.85;
+            transform: translateY(-4px);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #64748b;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .controls {
+            padding: 10px 30px;
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .controls-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .plan-info {
+            flex: 1;
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .plan-info::before {
+            content: '📋';
+            font-size: 14px;
+        }
+
+        .plan-info.active {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .plan-info.active::before {
+            content: '✅';
+        }
+
+        .calendar-wrapper {
+            padding: 15px 30px 20px 30px;
+            overflow-x: auto;
+            overflow-y: auto;
+            background: linear-gradient(to bottom, #ffffff, #fafbfc);
+            flex: 1;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #633d8f 100%);
+        }
+
+        .calendar {
+            min-width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .calendar th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 3px;
+            font-size: 7px;
+            font-weight: 700;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar th.corner {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            font-size: 7px;
+            min-width: 45px;
+        }
+
+        .calendar td {
+            border: 1px solid #e2e8f0;
+            padding: 2px;
+            min-width: 50px;
+            height: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            font-size: 7px;
+        }
+
+        .calendar td:hover {
+            background: #f1f5f9;
+            border-color: #667eea;
+        }
+
+        .calendar td.week-label {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            cursor: default;
+            font-size: 7px;
+            min-width: 45px;
+        }
+
+        .calendar td.week-label:hover {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+
+        .promotion {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2px 3px;
+            border-radius: 2px;
+            font-size: 6px;
+            font-weight: 700;
+            line-height: 1.1;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .promotion:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .promotion.bogo {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .promotion.percent-off {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .promotion.dollar-off {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .promotion.multibuy {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            width: 90%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-header::before {
+            content: '🎯';
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-size: 12px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: #fafbfc;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+            background: white;
+        }
+
+        .form-group input:hover,
+        .form-group select:hover,
+        .form-group textarea:hover {
+            border-color: #cbd5e1;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-cancel:hover {
+            background: #cbd5e1;
+        }
+
+        .simulation-results {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 25px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        }
+
+        .simulation-results h3 {
+            color: #059669;
+            font-size: 18px;
+            margin-bottom: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #d1fae5;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #475569;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            color: #059669;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            padding: 12px 30px;
+            background: linear-gradient(to top, #ffffff, #f8fafc);
+            border-top: 2px solid #e2e8f0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .legend::before {
+            content: '🎨 Promotion Types:';
+            font-weight: 700;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: #475569;
+            font-weight: 500;
+            padding: 4px 8px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state::before {
+            content: '📅';
+            font-size: 64px;
+            display: block;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h2>📊 TPO Platform</h2>
+                <p>RGM Suite</p>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item">
+                    <span class="menu-item-icon">📈</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item active">
+                    <span class="menu-item-icon">📅</span>
+                    <span>Calendar View</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-item-icon">📚</span>
+                    <span>Promotions Library</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-item-icon">🎯</span>
+                    <span>Scenarios</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-item-icon">📊</span>
+                    <span>Analytics & Reports</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-item-icon">⚙️</span>
+                    <span>Settings</span>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-user">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-info">
+                        <div class="user-name">RGM Manager</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📊</div>
+                    <div class="header-text">
+                        <h1>Trade Promotion Optimization</h1>
+                        <div class="subtitle">
+                            <span class="badge">RGM TEAM</span>
+                            <span>Revenue Growth Management</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="createPlan()">
+                    <span style="font-size: 16px; margin-right: 4px;">+</span> Create Plan
+                </button>
+            </div>
+
+            <!-- KPI Dashboard -->
+            <div class="dashboard-stats">
+                <div class="stats-header">
+                    <h2>📊 Plan Performance Metrics</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-label">Gross Sales Value</span>
+                            <span class="stat-icon">💰</span>
+                        </div>
+                        <div class="stat-value">$2.4M</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>12.5% vs baseline</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-label">Net Sales Value</span>
+                            <span class="stat-icon">💵</span>
+                        </div>
+                        <div class="stat-value">$1.8M</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>9.3% vs baseline</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-label">Marketing Activity Cost</span>
+                            <span class="stat-icon">📉</span>
+                        </div>
+                        <div class="stat-value">$245K</div>
+                        <div class="stat-change negative">
+                            <span>↑</span>
+                            <span>15.2% vs plan</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-label">Volume Lift</span>
+                            <span class="stat-icon">📦</span>
+                        </div>
+                        <div class="stat-value">18.5K</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>22.4% units</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-label">Volume Lift %</span>
+                            <span class="stat-icon">📈</span>
+                        </div>
+                        <div class="stat-value">28.7%</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>Above target</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-label">ROI</span>
+                            <span class="stat-icon">💎</span>
+                        </div>
+                        <div class="stat-value">3.2x</div>
+                        <div class="stat-change positive">
+                            <span>↑</span>
+                            <span>Strong return</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">📊 Promotion Type Performance</div>
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 85%;">
+                            <div class="bar-value">85%</div>
+                            <div class="bar-label">BOGO</div>
+                        </div>
+                        <div class="bar" style="height: 65%;">
+                            <div class="bar-value">65%</div>
+                            <div class="bar-label">% Off</div>
+                        </div>
+                        <div class="bar" style="height: 45%;">
+                            <div class="bar-value">45%</div>
+                            <div class="bar-label">$ Off</div>
+                        </div>
+                        <div class="bar" style="height: 70%;">
+                            <div class="bar-value">70%</div>
+                            <div class="bar-label">Multibuy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div class="controls">
+            <div class="controls-title">📅 Promotion Calendar</div>
+            <div class="plan-info" id="planInfo">No active plan. Create a plan to get started.</div>
+            <button class="btn btn-secondary" onclick="openPromotionModal()" id="addPromoBtn" disabled>
+                <span style="font-size: 16px;">🏷️</span> Add Promotion
+            </button>
+        </div>
+
+        <div class="calendar-wrapper" id="calendarWrapper">
+            <div class="empty-state">
+                <h3>No Plan Created Yet</h3>
+                <p>Click "Create Plan" to start building your promotion calendar</p>
+            </div>
+        </div>
+
+        <div class="legend" id="legend" style="display: none;">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></div>
+                <span>BOGO (Buy One Get One)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);"></div>
+                <span>% Off</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);"></div>
+                <span>$ Off</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);"></div>
+                <span>Multibuy</span>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Plan Creation Modal -->
+    <div class="modal" id="planModal">
+        <div class="modal-content">
+            <div class="modal-header">Create New Plan</div>
+            <form id="planForm">
+                <div class="form-group">
+                    <label>Plan Name</label>
+                    <input type="text" id="planName" required placeholder="e.g., Q1 2024 Promotions">
+                </div>
+                <div class="form-group">
+                    <label>Promoted Product Groups (PPGs)</label>
+                    <textarea id="planPPGs" rows="3" required placeholder="Enter PPGs separated by commas (e.g., Beverages, Snacks, Dairy, Frozen Foods)"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-cancel" onclick="closePlanModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Create Plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Promotion Modal -->
+    <div class="modal" id="promotionModal">
+        <div class="modal-content">
+            <div class="modal-header" id="promoModalHeader">Create Promotion</div>
+            <form id="promotionForm">
+                <div class="form-group">
+                    <label>Promotion Name</label>
+                    <input type="text" id="promoName" required placeholder="e.g., Summer Sale 2024">
+                </div>
+                <div class="form-group">
+                    <label>Promotion Type</label>
+                    <select id="promoType" required>
+                        <option value="">Select type...</option>
+                        <option value="bogo">BOGO (Buy One Get One)</option>
+                        <option value="percent-off">% Off</option>
+                        <option value="dollar-off">$ Off</option>
+                        <option value="multibuy">Multibuy</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Discount Value</label>
+                        <input type="number" id="promoValue" required placeholder="e.g., 20" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <select id="promoUnit" required>
+                            <option value="%">Percentage (%)</option>
+                            <option value="$">Dollar ($)</option>
+                            <option value="qty">Quantity</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Promoted Product Group (PPG)</label>
+                    <select id="promoPPG" required>
+                        <option value="">Select PPG...</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Week</label>
+                        <input type="number" id="promoStartWeek" required min="1" max="52" placeholder="1-52">
+                    </div>
+                    <div class="form-group">
+                        <label>End Week</label>
+                        <input type="number" id="promoEndWeek" required min="1" max="52" placeholder="1-52">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="promoDescription" rows="3" placeholder="Brief description of the promotion"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-cancel" onclick="closePromotionModal()">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="simulatePromotion()">Simulate</button>
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+                <div id="simulationResults"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentPlan = null;
+        let promotions = [];
+        let selectedCell = null;
+
+        // Initialize with default plan
+        function initializeDefaultPlan() {
+            currentPlan = {
+                name: 'Pet Food Promotions 2024',
+                ppgs: ['Dry Dog Food', 'Wet Dog Food', 'Dry Cat Food', 'Wet Cat Food', 'Dog Treats', 'Cat Treats'],
+                createdAt: new Date()
+            };
+
+            promotions = [
+                {
+                    id: 1,
+                    name: 'New Year Dog Food Sale',
+                    type: 'percent-off',
+                    value: 25,
+                    unit: '%',
+                    ppg: 'Dry Dog Food',
+                    startWeek: 1,
+                    endWeek: 4,
+                    description: 'Start the year with savings on premium dry dog food'
+                },
+                {
+                    id: 2,
+                    name: 'BOGO Wet Dog Food',
+                    type: 'bogo',
+                    value: 1,
+                    unit: 'qty',
+                    ppg: 'Wet Dog Food',
+                    startWeek: 5,
+                    endWeek: 6,
+                    description: 'Buy one get one free on select wet dog food varieties'
+                },
+                {
+                    id: 3,
+                    name: 'Valentine Pet Treats',
+                    type: 'dollar-off',
+                    value: 5,
+                    unit: '$',
+                    ppg: 'Dog Treats',
+                    startWeek: 7,
+                    endWeek: 8,
+                    description: 'Show your dog some love with $5 off premium treats'
+                },
+                {
+                    id: 4,
+                    name: 'Cat Food Bundle',
+                    type: 'multibuy',
+                    value: 3,
+                    unit: 'qty',
+                    ppg: 'Dry Cat Food',
+                    startWeek: 10,
+                    endWeek: 13,
+                    description: 'Buy 3 bags get special pricing'
+                },
+                {
+                    id: 5,
+                    name: 'Spring Cat Treats Promo',
+                    type: 'percent-off',
+                    value: 30,
+                    unit: '%',
+                    ppg: 'Cat Treats',
+                    startWeek: 14,
+                    endWeek: 17,
+                    description: 'Spring into savings with 30% off cat treats'
+                },
+                {
+                    id: 6,
+                    name: 'Premium Wet Cat Food Deal',
+                    type: 'dollar-off',
+                    value: 3,
+                    unit: '$',
+                    ppg: 'Wet Cat Food',
+                    startWeek: 18,
+                    endWeek: 21,
+                    description: '$3 off on premium wet cat food selections'
+                },
+                {
+                    id: 7,
+                    name: 'Summer Dog Food Savings',
+                    type: 'percent-off',
+                    value: 20,
+                    unit: '%',
+                    ppg: 'Dry Dog Food',
+                    startWeek: 22,
+                    endWeek: 26,
+                    description: 'Beat the heat with 20% off dry dog food'
+                },
+                {
+                    id: 8,
+                    name: 'Fourth of July Treats',
+                    type: 'bogo',
+                    value: 1,
+                    unit: 'qty',
+                    ppg: 'Cat Treats',
+                    startWeek: 27,
+                    endWeek: 28,
+                    description: 'Independence Day special - BOGO cat treats'
+                },
+                {
+                    id: 9,
+                    name: 'Back to School Pet Bundle',
+                    type: 'multibuy',
+                    value: 2,
+                    unit: 'qty',
+                    ppg: 'Wet Dog Food',
+                    startWeek: 32,
+                    endWeek: 35,
+                    description: 'Buy 2 cases get discount pricing'
+                },
+                {
+                    id: 10,
+                    name: 'Fall Cat Food Promotion',
+                    type: 'percent-off',
+                    value: 15,
+                    unit: '%',
+                    ppg: 'Dry Cat Food',
+                    startWeek: 36,
+                    endWeek: 39,
+                    description: 'Fall savings on dry cat food'
+                },
+                {
+                    id: 11,
+                    name: 'Halloween Pet Treats',
+                    type: 'dollar-off',
+                    value: 4,
+                    unit: '$',
+                    ppg: 'Dog Treats',
+                    startWeek: 43,
+                    endWeek: 44,
+                    description: 'Spooky savings on dog treats'
+                },
+                {
+                    id: 12,
+                    name: 'Black Friday Wet Cat Food',
+                    type: 'percent-off',
+                    value: 35,
+                    unit: '%',
+                    ppg: 'Wet Cat Food',
+                    startWeek: 47,
+                    endWeek: 48,
+                    description: 'Black Friday exclusive - 35% off wet cat food'
+                },
+                {
+                    id: 13,
+                    name: 'Holiday Dog Food Special',
+                    type: 'multibuy',
+                    value: 3,
+                    unit: 'qty',
+                    ppg: 'Dry Dog Food',
+                    startWeek: 49,
+                    endWeek: 52,
+                    description: 'Stock up for the holidays - buy 3 get special pricing'
+                }
+            ];
+
+            renderCalendar();
+            updatePlanInfo();
+            document.getElementById('addPromoBtn').disabled = false;
+            document.getElementById('legend').style.display = 'flex';
+        }
+
+        // Load default plan on page load
+        window.addEventListener('DOMContentLoaded', initializeDefaultPlan);
+
+        function createPlan() {
+            document.getElementById('planModal').classList.add('active');
+        }
+
+        function closePlanModal() {
+            document.getElementById('planModal').classList.remove('active');
+            document.getElementById('planForm').reset();
+        }
+
+        function openPromotionModal(ppg = null, week = null) {
+            selectedCell = { ppg, week };
+
+            if (ppg && week) {
+                document.getElementById('promoModalHeader').textContent = `Add Promotion - ${ppg}, Week ${week}`;
+                document.getElementById('promoPPG').value = ppg;
+                document.getElementById('promoStartWeek').value = week;
+                document.getElementById('promoEndWeek').value = week;
+            } else {
+                document.getElementById('promoModalHeader').textContent = 'Create Promotion';
+            }
+
+            document.getElementById('promotionModal').classList.add('active');
+            document.getElementById('simulationResults').innerHTML = '';
+        }
+
+        function closePromotionModal() {
+            document.getElementById('promotionModal').classList.remove('active');
+            document.getElementById('promotionForm').reset();
+            selectedCell = null;
+        }
+
+        document.getElementById('planForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const planName = document.getElementById('planName').value;
+            const ppgsText = document.getElementById('planPPGs').value;
+            const ppgs = ppgsText.split(',').map(p => p.trim()).filter(p => p);
+
+            if (ppgs.length === 0) {
+                alert('Please enter at least one PPG');
+                return;
+            }
+
+            currentPlan = {
+                name: planName,
+                ppgs: ppgs,
+                createdAt: new Date()
+            };
+
+            promotions = [];
+            renderCalendar();
+            updatePlanInfo();
+            closePlanModal();
+
+            document.getElementById('addPromoBtn').disabled = false;
+            document.getElementById('legend').style.display = 'flex';
+        });
+
+        document.getElementById('promotionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const promotion = {
+                id: Date.now(),
+                name: document.getElementById('promoName').value,
+                type: document.getElementById('promoType').value,
+                value: parseFloat(document.getElementById('promoValue').value),
+                unit: document.getElementById('promoUnit').value,
+                ppg: document.getElementById('promoPPG').value,
+                startWeek: parseInt(document.getElementById('promoStartWeek').value),
+                endWeek: parseInt(document.getElementById('promoEndWeek').value),
+                description: document.getElementById('promoDescription').value
+            };
+
+            if (promotion.startWeek > promotion.endWeek) {
+                alert('Start week must be before or equal to end week');
+                return;
+            }
+
+            // Check for conflicts
+            for (let week = promotion.startWeek; week <= promotion.endWeek; week++) {
+                const conflict = promotions.find(p =>
+                    p.ppg === promotion.ppg &&
+                    week >= p.startWeek &&
+                    week <= p.endWeek
+                );
+
+                if (conflict) {
+                    alert(`Conflict detected with "${conflict.name}" in week ${week}. Only one promotion per PPG-Week is allowed.`);
+                    return;
+                }
+            }
+
+            promotions.push(promotion);
+            renderCalendar();
+            closePromotionModal();
+        });
+
+        function renderCalendar() {
+            if (!currentPlan) return;
+
+            const wrapper = document.getElementById('calendarWrapper');
+
+            let html = '<table class="calendar"><thead><tr><th class="corner">Week / PPG</th>';
+
+            currentPlan.ppgs.forEach(ppg => {
+                html += `<th>${ppg}</th>`;
+            });
+
+            html += '</tr></thead><tbody>';
+
+            for (let week = 1; week <= 52; week++) {
+                html += `<tr><td class="week-label">Week ${week}</td>`;
+
+                currentPlan.ppgs.forEach(ppg => {
+                    const promo = promotions.find(p =>
+                        p.ppg === ppg &&
+                        week >= p.startWeek &&
+                        week <= p.endWeek
+                    );
+
+                    if (promo) {
+                        const typeLabel = {
+                            'bogo': 'BOGO',
+                            'percent-off': `${promo.value}% OFF`,
+                            'dollar-off': `$${promo.value} OFF`,
+                            'multibuy': `MULTIBUY ${promo.value}`
+                        }[promo.type];
+
+                        html += `<td class="has-promotion" onclick="viewPromotion(${promo.id})">
+                            <div class="promotion ${promo.type}">${typeLabel}<br>${promo.name}</div>
+                        </td>`;
+                    } else {
+                        html += `<td onclick="openPromotionModal('${ppg}', ${week})"></td>`;
+                    }
+                });
+
+                html += '</tr>';
+            }
+
+            html += '</tbody></table>';
+            wrapper.innerHTML = html;
+
+            // Update PPG dropdown
+            const ppgSelect = document.getElementById('promoPPG');
+            ppgSelect.innerHTML = '<option value="">Select PPG...</option>';
+            currentPlan.ppgs.forEach(ppg => {
+                ppgSelect.innerHTML += `<option value="${ppg}">${ppg}</option>`;
+            });
+        }
+
+        function updatePlanInfo() {
+            const info = document.getElementById('planInfo');
+            if (currentPlan) {
+                info.textContent = `Active Plan: ${currentPlan.name} | ${currentPlan.ppgs.length} PPGs | ${promotions.length} Promotions`;
+                info.classList.add('active');
+            }
+        }
+
+        function viewPromotion(id) {
+            const promo = promotions.find(p => p.id === id);
+            if (!promo) return;
+
+            const typeLabel = {
+                'bogo': 'BOGO (Buy One Get One)',
+                'percent-off': 'Percentage Off',
+                'dollar-off': 'Dollar Off',
+                'multibuy': 'Multibuy'
+            }[promo.type];
+
+            alert(`Promotion Details:\n\nName: ${promo.name}\nType: ${typeLabel}\nValue: ${promo.value}${promo.unit}\nPPG: ${promo.ppg}\nWeeks: ${promo.startWeek} - ${promo.endWeek}\nDescription: ${promo.description || 'N/A'}`);
+        }
+
+        function simulatePromotion() {
+            const name = document.getElementById('promoName').value;
+            const type = document.getElementById('promoType').value;
+            const value = parseFloat(document.getElementById('promoValue').value);
+            const ppg = document.getElementById('promoPPG').value;
+            const startWeek = parseInt(document.getElementById('promoStartWeek').value);
+            const endWeek = parseInt(document.getElementById('promoEndWeek').value);
+
+            if (!name || !type || !value || !ppg || !startWeek || !endWeek) {
+                alert('Please fill in all required fields before simulating');
+                return;
+            }
+
+            // Simulate metrics based on promotion type
+            const baselineSales = 50000;
+            const weeks = endWeek - startWeek + 1;
+
+            let uplift, projectedSales, roi, incrementalVolume;
+
+            switch(type) {
+                case 'bogo':
+                    uplift = 85;
+                    break;
+                case 'percent-off':
+                    uplift = value * 2.5;
+                    break;
+                case 'dollar-off':
+                    uplift = (value / 10) * 15;
+                    break;
+                case 'multibuy':
+                    uplift = value * 20;
+                    break;
+            }
+
+            projectedSales = baselineSales * (1 + uplift / 100) * weeks;
+            incrementalVolume = (projectedSales - baselineSales * weeks);
+            roi = (incrementalVolume / (baselineSales * weeks * (value / 100))) * 100;
+
+            const resultsHTML = `
+                <div class="simulation-results">
+                    <h3>📊 Simulation Results</h3>
+                    <div class="metric">
+                        <span class="metric-label">Baseline Sales (${weeks} week${weeks > 1 ? 's' : ''})</span>
+                        <span class="metric-value">$${(baselineSales * weeks).toLocaleString()}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Expected Uplift</span>
+                        <span class="metric-value">+${uplift.toFixed(1)}%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Projected Sales</span>
+                        <span class="metric-value">$${projectedSales.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Incremental Volume</span>
+                        <span class="metric-value">$${incrementalVolume.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Projected ROI</span>
+                        <span class="metric-value">${roi.toFixed(1)}%</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('simulationResults').innerHTML = resultsHTML;
+        }
+
+        // Update unit dropdown based on promotion type
+        document.getElementById('promoType').addEventListener('change', function() {
+            const unitSelect = document.getElementById('promoUnit');
+            const valueInput = document.getElementById('promoValue');
+
+            switch(this.value) {
+                case 'bogo':
+                    unitSelect.value = 'qty';
+                    valueInput.placeholder = 'e.g., 1';
+                    break;
+                case 'percent-off':
+                    unitSelect.value = '%';
+                    valueInput.placeholder = 'e.g., 20';
+                    break;
+                case 'dollar-off':
+                    unitSelect.value = '$';
+                    valueInput.placeholder = 'e.g., 5';
+                    break;
+                case 'multibuy':
+                    unitSelect.value = 'qty';
+                    valueInput.placeholder = 'e.g., 3';
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
